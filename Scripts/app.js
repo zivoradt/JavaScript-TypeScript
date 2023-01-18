@@ -1,6 +1,14 @@
 "use strict";
 var core;
 (function (core) {
+    function addLinkEvents() {
+        $("ul>li>a").on("click", function () {
+            loadLink($(this).attr("id"));
+        });
+        $("ul>li>a").on("mouseover", function () {
+            $(this).css('cursor', 'pointer');
+        });
+    }
     function loadLink(link, data = "") {
         $(`#${router.ActiveLink}`).removeClass("active");
         router.ActiveLink = link;
@@ -13,12 +21,7 @@ var core;
         $.get("./Views/components/header.html", function (data) {
             $("header").html(data);
             $(`#${pageName}`).addClass("active");
-            $("a").on("click", function () {
-                loadLink($(this).attr("id"));
-            });
-            $("a").on("mouseover", function () {
-                $(this).css('cursor', 'pointer');
-            });
+            addLinkEvents();
         });
     }
     function loadContent(pageName, callback) {
@@ -207,22 +210,17 @@ var core;
                 sessionStorage.clear();
                 loadLink("login");
             });
-            $("#logout").on("mouseover", function () {
-                $(this).css('cursor', 'pointer');
-            });
-            $(`<li class="nav-item">
+            let contactListLink = $("#contactListLink")[0];
+            if (!contactListLink) {
+                $(`<li id="contactListLink" class="nav-item">
         <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
       </li>`).insertBefore("#loginListItem");
+            }
         }
         else {
             $("#loginListItem").html(`<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`);
-            $("#login").on("click", function () {
-                loadLink("login");
-            });
-            $("#logout").on("mouseover", function () {
-                $(this).css('cursor', 'pointer');
-            });
         }
+        addLinkEvents();
     }
     function authGuard() {
         if (!sessionStorage.getItem("user")) {

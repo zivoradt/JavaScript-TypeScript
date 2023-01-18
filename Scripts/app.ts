@@ -2,6 +2,22 @@
 namespace core
 {
 
+    function addLinkEvents() {
+      // loop through each anchor tag in the unordered list and 
+        // add an event listener / handler to allow for 
+        // content injection
+      $("ul>li>a").on("click", function()
+        {
+          loadLink($(this).attr("id"));
+        });
+
+        // make it look like each nav item is an active link
+        $("ul>li>a").on("mouseover", function()
+        {
+          $(this).css('cursor', 'pointer');
+        });
+    }
+
     /**
      * This function switches page content relative to the link that is passed into the function
      * optionally, link data can be also be passed 
@@ -34,19 +50,7 @@ namespace core
         
         $(`#${pageName}`).addClass("active"); // highlight active link
 
-        // loop through each anchor tag in the unordered list and 
-        // add an event listener / handler to allow for 
-        // content injection
-        $("a").on("click", function()
-        {
-          loadLink($(this).attr("id"));
-        });
-
-        // make it look like each nav item is an active link
-        $("a").on("mouseover", function()
-        {
-          $(this).css('cursor', 'pointer');
-        });
+       addLinkEvents();
         
       });
     }
@@ -390,15 +394,13 @@ namespace core
          loadLink("login");
         });
 
-        // make it look like each nav item is an active link
-        $("#logout").on("mouseover", function()
-        {
-          $(this).css('cursor', 'pointer');
-        });
-       
-        $(`<li class="nav-item">
+        let contactListLink = $("#contactListLink")[0];
+        if(!contactListLink){
+          $(`<li id="contactListLink" class="nav-item">
         <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
       </li>`).insertBefore("#loginListItem");
+        }
+        
       
       }
       else
@@ -408,19 +410,8 @@ namespace core
           `<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`
           );
 
-          $("#login").on("click", function()
-        {
-
-          // redirect back to login
-         loadLink("login");
-        });
-
-        // make it look like each nav item is an active link
-        $("#logout").on("mouseover", function()
-        {
-          $(this).css('cursor', 'pointer');
-        });
       }
+      addLinkEvents();
     }
 
     function authGuard():void
