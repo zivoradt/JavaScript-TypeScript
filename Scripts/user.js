@@ -2,6 +2,12 @@
 var core;
 (function (core) {
     class User {
+        constructor(displayName = "", emailAddress = "", username = "", password = "") {
+            this.DisplayName = displayName;
+            this.EmailAddress = emailAddress;
+            this.Username = username;
+            this.Password = password;
+        }
         get DisplayName() {
             return this.m_displayName;
         }
@@ -25,12 +31,6 @@ var core;
         }
         set Password(value) {
             this.m_password = value;
-        }
-        constructor(displayName = "", emailAddress = "", username = "", password = "") {
-            this.DisplayName = displayName;
-            this.EmailAddress = emailAddress;
-            this.Username = username;
-            this.Password = password;
         }
         toString() {
             return `Display Name     : ${this.DisplayName} \nEmail Address : ${this.EmailAddress} \nUsername : ${this.Username}`;
@@ -57,7 +57,7 @@ var core;
                 return null;
             }
         }
-        publicdeserialize(data) {
+        deserialize(data) {
             let propertyArray = data.split(",");
             this.DisplayName = propertyArray[0];
             this.EmailAddress = propertyArray[1];

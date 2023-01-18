@@ -1,48 +1,54 @@
 "use strict";
 var core;
 (function (core) {
+    function loadLink(link, data = "") {
+        $(`#${router.ActiveLink}`).removeClass("active");
+        router.ActiveLink = link;
+        router.LinkData = data;
+        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+        $(`#${router.ActiveLink}`).addClass("active");
+        history.pushState({}, "", router.ActiveLink);
+    }
     function loadHeader(pageName) {
-        console.log(location.pathname);
-        $.get("/Views/components/header.html", function (data) {
+        $.get("./Views/components/header.html", function (data) {
             $("header").html(data);
+            toggleLogin();
             $(`#${pageName}`).addClass("active");
             $("a").on("click", function () {
-                $(`#${router.ActiveLink}`).removeClass("active");
-                router.ActiveLink = $(this).attr("id");
-                loadContent(router.ActiveLink, ActiveLinkCallback(router.ActiveLink));
-                $(`#${router.ActiveLink}`).addClass("active");
-                history.pushState({}, "", router.ActiveLink);
+                loadLink($(this).attr("id"));
             });
             $("a").on("mouseover", function () {
-                $(this).css("cursor", "pointer");
+                $(this).css('cursor', 'pointer');
             });
         });
     }
     function loadContent(pageName, callback) {
-        $.get(`/Views/content/${pageName}.html`, function (data) {
+        $.get(`./Views/content/${pageName}.html`, function (data) {
             $("main").html(data);
             callback();
         });
     }
     function loadFooter() {
-        $.get("/Views/components/footer.html", function (data) {
+        $.get("./Views/components/footer.html", function (data) {
             $("footer").html(data);
         });
     }
-    function displayHome() { }
-    function displayAbout() { }
-    function displayProjects() { }
-    function displayServices() { }
+    function displayHome() {
+        console.log("Home page function called");
+    }
+    function displayAbout() {
+    }
+    function displayProjects() {
+    }
+    function displayServices() {
+    }
     function testFullName() {
         let messageArea = $("#messageArea").hide();
         let fullNamePattern = /([A-Z][a-z]{1,25})+(\s|,|-)([A-Z][a-z]{1,25})+(\s|,|-)*/;
         $("#fullName").on("blur", function () {
             if (!fullNamePattern.test($(this).val().toString())) {
                 $(this).trigger("focus").trigger("select");
-                messageArea
-                    .show()
-                    .addClass("alert alert-danger")
-                    .text("Please enter a valid Full Name. This must include at least a Capitalized first name followed by a Capitlalized last name.");
+                messageArea.show().addClass("alert alert-danger").text("Please enter a valid Full Name. This must include at least a Capitalized first name followed by a Capitlalized last name.");
             }
             else {
                 messageArea.removeAttr("class").hide();
@@ -55,10 +61,7 @@ var core;
         $("#contactNumber").on("blur", function () {
             if (!contactNumberPattern.test($(this).val().toString())) {
                 $(this).trigger("focus").trigger("select");
-                messageArea
-                    .show()
-                    .addClass("alert alert-danger")
-                    .text("Please enter a valid Contact Number. Country code and area code are both optional");
+                messageArea.show().addClass("alert alert-danger").text("Please enter a valid Contact Number. Country code and area code are both optional");
             }
             else {
                 messageArea.removeAttr("class").hide();
@@ -71,10 +74,7 @@ var core;
         $("#emailAddress").on("blur", function () {
             if (!emailAddressPattern.test($(this).val().toString())) {
                 $(this).trigger("focus").trigger("select");
-                messageArea
-                    .show()
-                    .addClass("alert alert-danger")
-                    .text("Please enter a valid Email Address.");
+                messageArea.show().addClass("alert alert-danger").text("Please enter a valid Email Address.");
             }
             else {
                 messageArea.removeAttr("class").hide();
@@ -89,10 +89,10 @@ var core;
     function displayContact() {
         formValidation();
         $("#sendButton").on("click", (event) => {
+            let subscribeCheckbox = $("#subscribeCheckbox")[0];
             let fullName = $("#fullName")[0];
             let contactNumber = $("#contactNumber")[0];
             let emailAddress = $("#emailAddress")[0];
-            let subscribeCheckbox = $("#subscribeCheckbox")[0];
             if (subscribeCheckbox.checked) {
                 let contact = new core.Contact(fullName.value, contactNumber.value, emailAddress.value);
                 if (contact.serialize()) {
@@ -104,7 +104,6 @@ var core;
     }
     function displayContactList() {
         authGuard();
-        toggleLogin();
         if (localStorage.length > 0) {
             let contactList = document.getElementById("contactList");
             let data = "";
@@ -126,21 +125,21 @@ var core;
             }
             contactList.innerHTML = data;
             $("button.edit").on("click", function () {
-                location.href = "/edit#" + $(this).val();
+                loadLink("edit", $(this).val().toString());
             });
             $("button.delete").on("click", function () {
                 if (confirm("Are you sure?")) {
                     localStorage.removeItem($(this).val().toString());
                 }
-                location.href = "/contact-list";
+                loadLink("contact-list");
             });
             $("#addButton").on("click", function () {
-                location.href = "/edit";
+                loadLink("edit");
             });
         }
     }
     function displayEdit() {
-        let key = location.hash.substring(1);
+        let key = router.LinkData;
         let contact = new core.Contact();
         if (key != "") {
             contact.deserialize(localStorage.getItem(key));
@@ -161,10 +160,10 @@ var core;
             contact.ContactNumber = $("#contactNumber").val().toString();
             contact.EmailAddress = $("#emailAddress").val().toString();
             localStorage.setItem(key, contact.serialize());
-            location.href = "/contact-list";
+            loadLink("contact-list");
         });
         $("#cancelButton").on("click", function () {
-            location.href = "/contact-list";
+            loadLink("contact-list");
         });
     }
     function displayLogin() {
@@ -177,8 +176,7 @@ var core;
             let newUser = new core.User();
             $.get("./Data/users.json", function (data) {
                 for (const user of data.users) {
-                    if (username.val() == user.Username &&
-                        password.val() == user.Password) {
+                    if (username.val() == user.Username && password.val() == user.Password) {
                         newUser.fromJSON(user);
                         success = true;
                         break;
@@ -187,78 +185,67 @@ var core;
                 if (success) {
                     sessionStorage.setItem("user", newUser.serialize());
                     messageArea.removeAttr("class").hide();
-                    location.href = "/contact-list";
+                    loadLink("contact-list");
                 }
                 else {
                     username.trigger("focus").trigger("select");
-                    messageArea
-                        .show()
-                        .addClass("alert alert-danger")
-                        .text("Error: Invalid login information");
+                    messageArea.show().addClass("alert alert-danger").text("Error: Invalid login information");
                 }
             });
         });
         $("#cancelButton").on("click", function () {
             document.forms[0].reset();
-            location.href = "/";
+            loadLink("home");
         });
     }
-    function displayRegister() { }
+    function displayRegister() {
+    }
     function toggleLogin() {
         if (sessionStorage.getItem("user")) {
-            $("#loginListItem").html(`<a id = "logout" class="nav-link active" aria-current="page"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
+            $("#loginListItem").html(`<a id="logout" class="nav-link" aria-current="page"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
             $("#logout").on("click", function () {
                 sessionStorage.clear();
-                location.href = "/login";
+                loadLink("login");
+            });
+            $("#logout").on("mouseover", function () {
+                $(this).css('cursor', 'pointer');
             });
             $(`<li class="nav-item">
-        <a  id= "contactListLink" class="nav-link" aria-current="page" href="/contact-list"><i class="fas fa-users fa-lg"></i> Contact List</a>
+        <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
       </li>`).insertBefore("#loginListItem");
         }
         else {
-            $("#loginListItem").html(`<a id="login"class="nav-link" aria-current="page" ><i class="fas fa-sign-in-alt"></i> Login</a>`);
+            $("#loginListItem").html(`<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`);
         }
-        $("a").on("mouseover", function () {
-            $(this).css("cursor", "pointer");
-        });
-    }
-    function display404Page() {
     }
     function authGuard() {
         if (!sessionStorage.getItem("user")) {
-            location.href = "/login";
+            loadLink("login");
         }
     }
-    function ActiveLinkCallback(activeLink) {
+    function display404() {
+    }
+    function ActiveLinkCallBack(activeLink) {
         switch (activeLink) {
-            case "home":
-                return displayHome;
-            case "about":
-                return displayAbout;
-            case "projects":
-                return displayProjects;
-            case "services":
-                return displayServices;
-            case "contact":
-                return displayContact;
-            case "contact-list":
-                return displayContactList;
-            case "edit":
-                return displayEdit;
-            case "login":
-                return displayLogin;
-            case "register":
-                return displayRegister;
-            case "404":
-                return display404Page;
+            case "home": return displayHome;
+            case "about": return displayAbout;
+            case "projects": return displayProjects;
+            case "services": return displayServices;
+            case "contact": return displayContact;
+            case "contact-list": return displayContactList;
+            case "edit": return displayEdit;
+            case "login": return displayLogin;
+            case "register": return displayRegister;
+            case "404": return display404;
             default:
-                console.log("Erorr callback not exist" + activeLink);
+                console.error("ERROR: callback does not exist: " + activeLink);
+                break;
         }
     }
     function Start() {
         console.log("App Started...");
         loadHeader(router.ActiveLink);
-        loadContent(router.ActiveLink, ActiveLinkCallback(router.ActiveLink));
+        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
         loadFooter();
     }
     window.addEventListener("load", Start);

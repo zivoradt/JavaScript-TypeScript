@@ -1,18 +1,16 @@
-
 // Contact Class
 
 namespace core
 {
-  export class Contact {
-
-    // Instance variables
-
+  export class Contact 
+  {
+    // Instance Variables
     private m_fullName: string;
     private m_contactNumber: string;
     private m_emailAddress: string;
 
     // getters and setters
-    get FullName(): string
+    get FullName(): string 
     {
       return this.m_fullName;
     }
@@ -22,7 +20,7 @@ namespace core
       this.m_fullName = value;
     }
   
-    get ContactNumber():string
+    get ContactNumber(): string 
     {
       return this.m_contactNumber;
     }
@@ -32,7 +30,7 @@ namespace core
       this.m_contactNumber = value;
     }
   
-    get EmailAddress():string
+    get EmailAddress() :string
     {
       return this.m_emailAddress;
     }
@@ -63,7 +61,7 @@ namespace core
      *
      * @returns {string}
      */
-    public toString(): string
+    public toString(): string 
     {
       return `Full Name     : ${this.FullName} \nContact Number: ${this.ContactNumber}\nEmail Address : ${this.EmailAddress}`;
     }
@@ -73,7 +71,7 @@ namespace core
      *
      * @returns {Object}
      */
-    public toJSON(): Object
+    public toJSON():Object
     {
       return {
         "FullName": this.FullName,
@@ -85,7 +83,7 @@ namespace core
     /**
      * This method takes a JSON data object and assigns the values to the Contact class properties
      *
-     * @param {Object} 
+     * @param {Object} data
      * @returns {void}
      */
     public fromJSON(data: any): void
@@ -119,9 +117,9 @@ namespace core
      * @param {string} data
      * @return {void}
      */
-    public deserialize(data: string ): void
+    public deserialize(data: string): void
     {
-      let propertyArray = data.split(",");
+      let propertyArray: string[] = data.split(",");
       this.FullName = propertyArray[0];
       this.ContactNumber = propertyArray[1];
       this.EmailAddress = propertyArray[2];
@@ -129,5 +127,4 @@ namespace core
   }
 
 }
-
 

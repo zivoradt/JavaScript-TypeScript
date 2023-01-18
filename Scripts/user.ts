@@ -1,18 +1,17 @@
-
 // User Class
+
 namespace core
 {
   export class User 
   {
-    //Instances Variables
-
+    // Instance Variables
     private m_displayName: string;
     private m_emailAddress: string;
     private m_username: string;
     private m_password: string;
-    
+
     // getters and setters
-    get DisplayName(): string
+    get DisplayName() :string
     {
       return this.m_displayName;
     }
@@ -42,12 +41,12 @@ namespace core
       this.m_username = value;
     }
 
-    get Password() : string
+    get Password() :string
     {
       return this.m_password;
     }
   
-    set Password(value: string) 
+    set Password(value:string) 
     {
       this.m_password = value;
     }
@@ -76,7 +75,7 @@ namespace core
      *
      * @returns {string}
      */
-    public toString(): string 
+    public toString() :string
     {
       return `Display Name     : ${this.DisplayName} \nEmail Address : ${this.EmailAddress} \nUsername : ${this.Username}`;
     }
@@ -99,6 +98,7 @@ namespace core
      * This method takes a JSON data object and assigns the values to the User class properties
      *
      * @param {Object} data
+     * @returns {void}
      */
     public fromJSON(data: any): void
     {
@@ -113,7 +113,7 @@ namespace core
      *
      * @returns {string}
      */
-    public serialize():string
+    public serialize(): string
     {
       if(this.DisplayName !== "" && this.EmailAddress !== "" && this.Username !== "")
       {
@@ -132,7 +132,7 @@ namespace core
      * @param {string} data
      * @return {void}
      */
-    publicdeserialize(data:string):void
+    public deserialize(data: string): void
     {
       let propertyArray = data.split(",");
       this.DisplayName = propertyArray[0];
