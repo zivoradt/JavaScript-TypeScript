@@ -12,7 +12,6 @@ var core;
     function loadHeader(pageName) {
         $.get("./Views/components/header.html", function (data) {
             $("header").html(data);
-            toggleLogin();
             $(`#${pageName}`).addClass("active");
             $("a").on("click", function () {
                 loadLink($(this).attr("id"));
@@ -25,6 +24,7 @@ var core;
     function loadContent(pageName, callback) {
         $.get(`./Views/content/${pageName}.html`, function (data) {
             $("main").html(data);
+            toggleLogin();
             callback();
         });
     }
@@ -216,6 +216,12 @@ var core;
         }
         else {
             $("#loginListItem").html(`<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+            $("#login").on("click", function () {
+                loadLink("login");
+            });
+            $("#logout").on("mouseover", function () {
+                $(this).css('cursor', 'pointer');
+            });
         }
     }
     function authGuard() {

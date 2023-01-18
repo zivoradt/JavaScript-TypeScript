@@ -2,11 +2,6 @@
 var core;
 (function (core) {
     class Contact {
-        constructor(fullName = "", contactNumber = "", emailAddress = "") {
-            this.FullName = fullName;
-            this.ContactNumber = contactNumber;
-            this.EmailAddress = emailAddress;
-        }
         get FullName() {
             return this.m_fullName;
         }
@@ -24,6 +19,11 @@ var core;
         }
         set EmailAddress(value) {
             this.m_emailAddress = value;
+        }
+        constructor(fullName = "", contactNumber = "", emailAddress = "") {
+            this.FullName = fullName;
+            this.ContactNumber = contactNumber;
+            this.EmailAddress = emailAddress;
         }
         toString() {
             return `Full Name     : ${this.FullName} \nContact Number: ${this.ContactNumber}\nEmail Address : ${this.EmailAddress}`;

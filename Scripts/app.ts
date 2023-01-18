@@ -32,8 +32,6 @@ namespace core
       {
         $("header").html(data); // load the navigation bar
         
-        toggleLogin(); // add login / logout and secure links
-        
         $(`#${pageName}`).addClass("active"); // highlight active link
 
         // loop through each anchor tag in the unordered list and 
@@ -66,6 +64,8 @@ namespace core
       $.get(`./Views/content/${pageName}.html`, function(data)
       {
         $("main").html(data);
+
+        toggleLogin(); // add login / logout and secure links
 
         callback();
       });
@@ -407,6 +407,19 @@ namespace core
         $("#loginListItem").html(
           `<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`
           );
+
+          $("#login").on("click", function()
+        {
+
+          // redirect back to login
+         loadLink("login");
+        });
+
+        // make it look like each nav item is an active link
+        $("#logout").on("mouseover", function()
+        {
+          $(this).css('cursor', 'pointer');
+        });
       }
     }
 
