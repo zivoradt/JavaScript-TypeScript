@@ -11,7 +11,7 @@ var core;
             $(this).css('cursor', 'pointer');
         });
     }
-    function loadLink(link, data = "") {
+    function highlightActiveLink(link) {
         $(`#${router.ActiveLink}`).removeClass("active");
         if (link == "logout") {
             sessionStorage.clear();
@@ -19,10 +19,14 @@ var core;
         }
         else {
             router.ActiveLink = link;
-            router.LinkData = data;
         }
         $(`#${router.ActiveLink}`).addClass("active");
+    }
+    function loadLink(link, data = "") {
+        highlightActiveLink(link);
+        router.LinkData = data;
         loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+        highlightActiveLink(link);
         history.pushState({}, "", router.ActiveLink);
     }
     function loadHeader(pageName) {
@@ -45,7 +49,6 @@ var core;
         });
     }
     function displayHome() {
-        console.log("Home page function called");
     }
     function displayAbout() {
     }
@@ -100,6 +103,7 @@ var core;
     function displayContact() {
         formValidation();
         $("#sendButton").on("click", (event) => {
+            event.preventDefault();
             let subscribeCheckbox = $("#subscribeCheckbox")[0];
             let fullName = $("#fullName")[0];
             let contactNumber = $("#contactNumber")[0];
@@ -228,6 +232,7 @@ var core;
             }
         }
         addLinkEvents();
+        highlightActiveLink(router.ActiveLink);
     }
     function authGuard() {
         if (!sessionStorage.getItem("user")) {
