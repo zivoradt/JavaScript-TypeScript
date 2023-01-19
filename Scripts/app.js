@@ -2,6 +2,8 @@
 var core;
 (function (core) {
     function addLinkEvents() {
+        $("ul>li>a").off("click");
+        $("ul>li>a").off("mouseover");
         $("ul>li>a").on("click", function () {
             loadLink($(this).attr("id"));
         });
@@ -11,10 +13,16 @@ var core;
     }
     function loadLink(link, data = "") {
         $(`#${router.ActiveLink}`).removeClass("active");
-        router.ActiveLink = link;
-        router.LinkData = data;
-        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
+        if (link == "logout") {
+            sessionStorage.clear();
+            router.ActiveLink = "login";
+        }
+        else {
+            router.ActiveLink = link;
+            router.LinkData = data;
+        }
         $(`#${router.ActiveLink}`).addClass("active");
+        loadContent(router.ActiveLink, ActiveLinkCallBack(router.ActiveLink));
         history.pushState({}, "", router.ActiveLink);
     }
     function loadHeader(pageName) {
@@ -204,13 +212,9 @@ var core;
     function displayRegister() {
     }
     function toggleLogin() {
+        let contactListLink = $("#contactListLink")[0];
         if (sessionStorage.getItem("user")) {
             $("#loginListItem").html(`<a id="logout" class="nav-link" aria-current="page"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
-            $("#logout").on("click", function () {
-                sessionStorage.clear();
-                loadLink("login");
-            });
-            let contactListLink = $("#contactListLink")[0];
             if (!contactListLink) {
                 $(`<li id="contactListLink" class="nav-item">
         <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
@@ -219,6 +223,9 @@ var core;
         }
         else {
             $("#loginListItem").html(`<a id="login" class="nav-link" aria-current="page"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+            if (contactListLink) {
+                $("#contactListLink").remove();
+            }
         }
         addLinkEvents();
     }

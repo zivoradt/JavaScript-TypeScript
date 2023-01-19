@@ -116,7 +116,7 @@ router.AddTable(["/",
                 
 let route = location.pathname; // alias for location.pathname
 
-console.log(router);
+
 
 if(router.Find(route) > -1)
 {
