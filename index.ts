@@ -18,8 +18,14 @@ app.use(express.static(path.join(__dirname, "Client")));
 app.use(express.static(path.join(__dirname, "Views")));
 
 //Routhing
+// default route
 app.get('/', (req, res)=>{
       displaySPA(res);
+})
+
+// wild cart rout to check 404 error page
+app.get('*', (req, res)=>{
+  displaySPA(res);
 })
 
 // kick off server and listens on PORT

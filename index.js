@@ -12,6 +12,9 @@ app.use(express.static(path.join(__dirname, "Views")));
 app.get('/', (req, res) => {
     displaySPA(res);
 });
+app.get('*', (req, res) => {
+    displaySPA(res);
+});
 app.listen(PORT, () => {
     console.log(`Example app listening at http://${HOST}:${PORT}`);
 });
