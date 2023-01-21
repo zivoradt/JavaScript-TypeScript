@@ -66,7 +66,7 @@ namespace core {
    */
   function loadHeader(pageName: string): void {
     // inject the Header
-    $.get("./Views/components/header.html", function (data) {
+    $.get("./components/header.html", function (data) {
       $("header").html(data); // load the navigation bar
 
       $(`#${pageName}`).addClass("active"); // highlight active link
@@ -85,7 +85,7 @@ namespace core {
    */
   function loadContent(pageName: string, callback: Function): void {
     // inject content
-    $.get(`./Views/content/${pageName}.html`, function (data) {
+    $.get(`./content/${pageName}.html`, function (data) {
       $("main").html(data);
 
       toggleLogin(); // add login / logout and secure links
@@ -101,7 +101,7 @@ namespace core {
    */
   function loadFooter(): void {
     // inject the Footer
-    $.get("./Views/components/footer.html", function (data) {
+    $.get("./components/footer.html", function (data) {
       $("footer").html(data);
     });
   }
