@@ -9,7 +9,7 @@ import { ServerResponse } from "node:http";
 // constructor function of express - create express app
 const app = express(); 
 
-const PORT = 3000;
+const PORT = process.env.PORT || '3000';
 const HOST = "localhost";
 
 // static files (it set the path to node modules so in the index.html we can delete ./node_module path)
