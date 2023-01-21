@@ -10,7 +10,8 @@
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@popperjs/core": "^2.6.0",
     "bootstrap": "^5.0.0-beta1",
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "mime-types": "^2.1.35"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.5"

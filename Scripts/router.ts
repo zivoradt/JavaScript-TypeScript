@@ -101,6 +101,7 @@ namespace core
 
 }
 
+
 //TODO: need to move the code below into its own file
 let router = new core.Router();
 router.AddTable(["/", 
@@ -116,7 +117,7 @@ router.AddTable(["/",
                 
 let route = location.pathname; // alias for location.pathname
 
-
+console.log(route);
 
 if(router.Find(route) > -1)
 {
