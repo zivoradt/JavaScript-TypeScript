@@ -288,8 +288,11 @@ namespace core {
       contact.ContactNumber = $("#contactNumber").val().toString();
       contact.EmailAddress = $("#emailAddress").val().toString();
 
-      // add the contact info to localStorage
+      if (contact.serialize()) {
+        // add the contact info to localStorage
       localStorage.setItem(key, contact.serialize());
+      }
+
 
       // return to the contact list
       loadLink("contact-list");
