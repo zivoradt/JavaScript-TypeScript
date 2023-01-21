@@ -1,51 +1,29 @@
 // pre-bundled node modules
-const http = require("http");
 const fs = require("fs");
-const url = require("url");
 
 //3rd-party module
-const mimeTypes = require("mime-types");
-// alias
-let lookup = mimeTypes.lookup;
+const express = require('express');
+
+// constructor function of express - create express app
+const app = express(); 
 
 const PORT = 3000;
 const HOST = "localhost";
 
-let server = http.createServer((req, res) => {
-  let parseURL = new URL(req.url, "http://" + HOST + ":" + PORT);
+app.get('/', (req, res)=>{
+  res.end('Hello World!')
+})
 
-  let path = parseURL.pathname.replace(/^\/+|\/+$/g, "");
+app.listen(PORT, ()=>
+{
+  console.log(`Example app listening at http://${HOST}:${PORT}`);
+})
 
-  switch (path) {
-    case "":
-    case "home":
-      path = "index.html";
-      break;
-    case "/about":
-      path = "index.html";
-      break;
-    case "/services":
-      path = "index.html";
-      break;
-    case "/contact":
-      path = "index.html";
-      break;
-    case "/contact-list":
-      path = "index.html";
-      break;
-    case "/projects":
-      path = "index.html";
-      break;
-    case "/register":
-      path = "index.html";
-      break;
-    case "/login":
-      path = "index.html";
-      break;
-    case "/edit":
-      path = "index.html";
-      break;
-  }
+
+/*let server = http.createServer((req, res) => {
+
+  
+
 
   let file = __dirname + "/" + path;
 
@@ -60,8 +38,8 @@ let server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-type": mime });
     res.end(data);
   });
-});
+}); */
 
-server.listen(PORT);
 
-console.log("Server running at http://localhost:3000/");
+
+
