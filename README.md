@@ -40,7 +40,7 @@ The project follows a basic version of the MVC pattern:
 • controller.js: Represents the Controller, mediating between the Model and View, processing user input, and updating the Model and View accordingly.<br>
 • index.js: The main TypeScript file, which sets up the server and initializes the application.<br>
 
-#Usage
+# Usage
 This basic SPA allows you to perform the following actions:
 
 • View the initial data on the page load.<br>
